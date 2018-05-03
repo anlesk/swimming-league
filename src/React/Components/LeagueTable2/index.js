@@ -10,7 +10,8 @@ import classnames from 'classnames';
 import { get } from 'lodash';
 import { PulseLoader } from 'react-spinners';
 
-import Status from '../../Utils/Status';
+import Status from '../../../Enums/Status';
+import SortDirection from '../../../Enums/SortDirection';
 import locales from '../LeagueTable/locales';
 import './styles/style.css';
 
@@ -39,12 +40,6 @@ const cols = {
   sub20: {
     width: '7%',
   },
-}
-
-
-const SortDirection = {
-  ASC: 'asc',
-  DESC: 'desc',
 }
 
 const loadingElement = (

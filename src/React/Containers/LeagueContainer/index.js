@@ -1,15 +1,30 @@
 import React from 'react';
 import { Grid, Row } from 'react-bootstrap';
+import { connect } from 'react-redux';
 
 import LeagueTable from '../../Components/LeagueTable2';
 import LeagueTableFilter from '../../Components/LeagueTableFilter';
-import Status from '../../Utils/Status';
+import Status from '../../../Enums/Status';
+
+import {
+  loadLeaderboardAC,
+  getLeaderboard,
+} from '../../../Redux/Ducks/Leaderboard';
+import {
+  getFiltersAll,
+  getSelectedFilters,
+  selectFilterAC,
+} from '../../../Redux/Ducks/Filters';
+import {
+  getStatistics,
+  loadStatisticsAC,
+} from '../../../Redux/Ducks/Statistics';
 
 const loadData = async ({ sortBy, sortDirection, size, offset } = {}) => await ([
   { position: 1, name: '123', sex: 333, phone: 12345 },
   { position: 2, name: 321, sex: 542, phone: 12346 },
   { position: 3, name: 321, sex: 4321, phone: 12347 },
-])
+]);
 
 const loadGroupedData = async id => {
   await new Promise(resolve => setTimeout(resolve, 1000));
@@ -85,4 +100,16 @@ class LeagueContainer extends React.Component {
   }
 }
 
-export default LeagueContainer;
+export default ;
+
+
+export default connect(state => ({
+  leaderboard: getLeaderboard(state),
+  statistics: getStatistics(state),
+  filters: getFiltersAll(state),
+  selectedFilters: getSelectedFilters(state),
+}), {
+  loadLeaderboardAC,
+  loadStatisticsAC,
+  selectFilterAC,
+})(LeagueContainer);
