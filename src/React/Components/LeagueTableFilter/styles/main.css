@@ -1,0 +1,19 @@
+.Select-control {
+  height: 34px;
+}
+
+.Select-menu-outer {
+  width: auto;
+  margin-top: 15px;
+}
+
+.Select-option {
+  white-space: nowrap;
+}
+
+.clearFiltersButton {
+  border: none;
+  outline: none !important;
+  box-shadow: none;
+}
+
