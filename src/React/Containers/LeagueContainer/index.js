@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 
 import LeagueTable from '../../Components/LeagueTable2';
 import LeagueTableFilter from '../../Components/LeagueTableFilter';
-import Status from '../../../Enums/Status';
 
 import {
   loadLeaderboardAC,
@@ -36,41 +35,25 @@ const loadGroupedData = async id => {
 };
 
 class LeagueContainer extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      data: {},
-      groupedData: {},
-    }
-  }
-
   componentDidMount() {
-   this.updateData();
+   this.props.loadLeaderboardAC();
   }
 
-  updateData = params => loadData(params)
-    .then(result => this.setState({ data: { items: result, status: Status.SUCCESS } }));
-
-  getGroupedData = id => {
-    const { groupedData } = this.state;
-    const newGroupedData = { ...groupedData, [id]: { items: [], status: Status.LOADING } }
-    this.setState({ groupedData: newGroupedData });
-
-    loadGroupedData(id)
-      .then(result => this.setState({ groupedData: { ...groupedData, [id]: { items: result, status: Status.SUCCESS } } }))
+  handleChangeFilter = (filter, value) => {
+    this.props.selectFilterAC(filter, value);
   }
 
-  getData = (params) => {
-    this.setState();
-    this.updateData(params)
-  }
+  handleShowMore = () => {}
+
+  handleStatisticsRequest = personId => this.props.loadStatisticsAC(personId);
 
   render() {
     const {
-      groupedData,
-      data,
-    } = this.state;
+      leaderboard,
+      statistics,
+      filters,
+      selectedFilters,
+    } = this.props;
 
     return (
       <Grid>
@@ -82,26 +65,27 @@ class LeagueContainer extends React.Component {
         <hr/>
 
         <Row>
-          <LeagueTableFilter />
+          <LeagueTableFilter
+            filter={filters}
+            selectedFilters={selectedFilters}
+            onChangeFilter={this.handleChangeFilter}
+          />
         </Row>
 
         <br/>
 
         <Row>
           <LeagueTable
-            data={data}
-            groupedData={groupedData}
-            getGroupedData={this.getGroupedData}
-            getData={this.getData}
+            data={leaderboard}
+            groupedData={statistics}
+            onStatisticsRequest={this.handleStatisticsRequest}
+            onShowMore={this.handleShowMore}
           />
         </Row>
       </Grid>
     );
   }
 }
-
-export default ;
-
 
 export default connect(state => ({
   leaderboard: getLeaderboard(state),

@@ -1,4 +1,4 @@
-import { get, set } from 'lodash';
+import { set, map } from 'lodash';
 
 import { withStart, withSuccess, withFail } from '../../Utils/withSuffix';
 import createAction from '../../Utils/createAction';
@@ -55,6 +55,5 @@ export const selectFilterAC = (filter, value) => createAction(SELECT_FILTER, { f
 
 // Selectors
 export const getFiltersAll = state => state.filters;
-export const getSelectedFilters = state => state.filters
-  .map(filter => filter.selected);
+export const getSelectedFilters = state => map(state.filters, filter => filter.selected);
 
