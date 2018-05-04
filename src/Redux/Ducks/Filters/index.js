@@ -1,5 +1,3 @@
-import { set } from 'lodash';
-
 import { withStart, withSuccess, withFail } from '../../Utils/withSuffix';
 import createAction from '../../Utils/createAction';
 import Status from '../../../Enums/Status';
