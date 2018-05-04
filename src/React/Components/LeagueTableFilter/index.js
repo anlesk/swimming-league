@@ -40,6 +40,7 @@ class LeagueTableFilter extends React.Component {
       filters = {},
       selectedFilters = {},
       onClearFilters,
+      disabled,
     } = this.props;
 
 
@@ -49,6 +50,7 @@ class LeagueTableFilter extends React.Component {
           <Button
             className={'clearFiltersButton'}
             onClick={onClearFilters}
+            disabled={disabled}
           >
             <span style={{ color: 'red' }}>x</span> Сбросить фильтры
           </Button>
@@ -64,6 +66,7 @@ class LeagueTableFilter extends React.Component {
                   defaultValue={selectedFilters[Filter.NAME]}
                   inputRef={(ref) => {this.input = ref}}
                   placeholder='Введите имя'
+                  disabled={disabled}
                 />
                 <InputGroup.Button>
                   <Button
@@ -84,6 +87,7 @@ class LeagueTableFilter extends React.Component {
                 options={filters[Filter.CITY]}
                 style={{ minWidth: 160 }}
                 menuStyle={{ minWidth: 160 }}
+                disabled={disabled}
               />
             </FormGroup>
 
@@ -96,6 +100,7 @@ class LeagueTableFilter extends React.Component {
                 options={filters[Filter.SEX]}
                 style={{ width: 100 }}
                 menuStyle={{ minWidth: 100 }}
+                disabled={disabled}
               />
             </FormGroup>
 
@@ -114,7 +119,8 @@ class LeagueTableFilter extends React.Component {
             <FormGroup style={{ marginLeft: 20 }}>
               <Button
                 bsStyle={selectedFilters[Filter.SUB20] === true ? "info" : 'default'}
-                onClick={() => this.selectFilter(Filter.CITY, !selectedFilters[Filter.SUB20])}
+                onClick={() => this.selectFilter(Filter.SUB20, !selectedFilters[Filter.SUB20])}
+                disabled={disabled}
               >
                 SUB20
               </Button>

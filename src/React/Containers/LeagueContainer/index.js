@@ -58,7 +58,7 @@ class LeagueContainer extends React.Component {
 
         <Row>
           <LeagueTableFilter
-            filter={filters}
+            filters={filters}
             selectedFilters={selectedFilters}
             onChangeFilter={this.handleChangeFilter}
             onClearFilters={this.props.clearFiltersAC}
