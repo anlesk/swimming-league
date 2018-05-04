@@ -7,6 +7,7 @@ import Status from '../../../Enums/Status';
 // Constants
 export const LOAD_FILTER = 'LOAD_FILTER';
 export const SELECT_FILTER = 'SELECT_FILTER';
+export const CLEAR_FILTER = 'CLEAR_FILTER';
 
 // Initial State
 const initialState = {
@@ -45,6 +46,10 @@ export default function reducer(filters = initialState, action = {}) {
       return selectFilter(filters, filter, value);
     }
 
+    case CLEAR_FILTER: {
+      return map(filters, ({ selected, ...rest }) => ({ ...rest }));
+    }
+
     default:
       return filters;
   }
@@ -52,6 +57,7 @@ export default function reducer(filters = initialState, action = {}) {
 
 // Action Creators for Reducers
 export const selectFilterAC = (filter, value) => createAction(SELECT_FILTER, { filter, value });
+export const clearFiltersAC = () => createAction(CLEAR_FILTER);
 
 // Selectors
 export const getFiltersAll = state => state.filters;

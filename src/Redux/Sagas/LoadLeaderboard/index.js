@@ -1,5 +1,5 @@
-import { takeLatest, call, put, select } from 'redux-saga/effects';
-import { withStart, withSuccess, withFail } from '../../Utils/withSuffix';
+import { takeEvery, call, select } from 'redux-saga/effects';
+import { putStart, putSuccess, putFail } from '../Utils/Suffix';
 
 import {
   LOAD_LEADERBOARD,
@@ -10,17 +10,17 @@ import {
 import Services from '../../../Services';
 
 
-export function* findMatchingJournals() {
+export function* loadLeaderboard() {
   try {
-    yield put(withStart(LOAD_LEADERBOARD));
+    yield call(putStart, LOAD_LEADERBOARD);
     const filters = yield select(getSelectedFilters);
-    const result = yield call(Services, filters);
-    yield put(withSuccess(LOAD_LEADERBOARD, result));
+    const result = yield call(Services.LeagueService.getLeaderboard, filters);
+    yield call(putSuccess, LOAD_LEADERBOARD, result);
   } catch (e) {
-    yield put(withFail(LOAD_LEADERBOARD));
+    yield call(putFail,LOAD_LEADERBOARD);
   }
 }
 
 export function* watchLoadLeaderboard() {
-  yield takeLatest(LOAD_LEADERBOARD, findMatchingJournals);
+  yield takeEvery(LOAD_LEADERBOARD, loadLeaderboard);
 }

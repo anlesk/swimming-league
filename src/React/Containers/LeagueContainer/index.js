@@ -13,6 +13,7 @@ import {
   getFiltersAll,
   getSelectedFilters,
   selectFilterAC,
+  clearFiltersAC,
 } from '../../../Redux/Ducks/Filters';
 import {
   getStatistics,
@@ -69,6 +70,7 @@ class LeagueContainer extends React.Component {
             filter={filters}
             selectedFilters={selectedFilters}
             onChangeFilter={this.handleChangeFilter}
+            onClearFilters={this.props.clearFiltersAC}
           />
         </Row>
 
@@ -96,4 +98,5 @@ export default connect(state => ({
   loadLeaderboardAC,
   loadStatisticsAC,
   selectFilterAC,
+  clearFiltersAC
 })(LeagueContainer);

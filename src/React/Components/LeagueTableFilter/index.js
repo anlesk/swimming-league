@@ -13,38 +13,41 @@ import 'react-select/dist/react-select.css';
 
 import './styles/main.css'
 
+const Filter = {
+  NAME: 'name',
+  SEX: 'sex',
+  AGE_GROUP: 'ageGroup',
+  CITY: 'city',
+  SUB20: 'sub20',
+}
+
 class LeagueTableFilter extends React.Component {
-  state = {
-    selectedOption: '',
-  }
-
-  handleChange = (selectedOption) => {
-    this.setState({ selectedOption });
-    console.log(`Selected: ${selectedOption.label}`);
-  }
-
   handleKeyDown = (e) => {
     if (e.keyCode === 13) {
-      this.clickHandlerAddon();
+      this.handleInputSubmit();
     }
   };
 
-  handleInputChange(e) {
-    this.setState({ value: e.target.value });
-  }
-
-  clickHandlerAddon = () => {
-    alert('clicked');
+  handleInputSubmit = () => {
+    this.selectFilter(Filter.NAME, this.input.value);
   };
 
+  selectFilter = (filter, value) => this.props.onChangeFilter(filter, value)
+
   render() {
-    const { selectedOption } = this.state;
+    const {
+      filters = {},
+      selectedFilters = {},
+      onClearFilters,
+    } = this.props;
+
 
     return (
       <React.Fragment>
         <Row style={{ textAlign: 'right' }}>
           <Button
             className={'clearFiltersButton'}
+            onClick={onClearFilters}
           >
             <span style={{ color: 'red' }}>x</span> Сбросить фильтры
           </Button>
@@ -55,13 +58,16 @@ class LeagueTableFilter extends React.Component {
               <InputGroup>
                 <FormControl
                   onKeyDown={this.handleKeyDown}
-                  name="nameFilter"
-                  type="text"
-                  onChange={this.handleInputChange}
-                  placeholder={'Введите имя'}
+                  name={Filter.NAME}
+                  type='text'
+                  defaultValue={selectedFilters[Filter.NAME]}
+                  inputRef={(ref) => {this.input = ref}}
+                  placeholder='Введите имя'
                 />
                 <InputGroup.Button>
-                  <Button>
+                  <Button
+                    onClick={this.handleInputSubmit}
+                  >
                     <Glyphicon glyph="search" />
                   </Button>
                 </InputGroup.Button>
@@ -70,14 +76,11 @@ class LeagueTableFilter extends React.Component {
 
             <FormGroup style={{ marginLeft: 20 }}>
               <Select
-                name={'city-filter'}
-                value={selectedOption}
+                name={Filter.CITY}
+                value={selectedFilters[Filter.CITY]}
                 placeholder={'Город'}
-                onChange={this.handleChange}
-                options={[
-                  { value: 'one', label: 'One' },
-                  { value: 'two', label: 'TwoTwoTwoTwoTwo aasdada asd ' },
-                ]}
+                onChange={(val) => this.selectFilter(Filter.CITY, val)}
+                options={filters[Filter.CITY]}
                 style={{ minWidth: 160 }}
                 menuStyle={{ minWidth: 160 }}
               />
@@ -85,14 +88,11 @@ class LeagueTableFilter extends React.Component {
 
             <FormGroup style={{ marginLeft: 20 }}>
               <Select
-                name={'sex-filter'}
-                placeholder={'Пол'}
-                value={selectedOption}
-                onChange={this.handleChange}
-                options={[
-                  { value: 'one', label: 'One' },
-                  { value: 'two', label: 'Two' },
-                ]}
+                name={Filter.SEX}
+                placeholder='Пол'
+                value={selectedFilters[Filter.SEX]}
+                onChange={(val) => this.selectFilter(Filter.SEX, val)}
+                options={filters[Filter.SEX]}
                 style={{ width: 100 }}
                 menuStyle={{ minWidth: 100 }}
               />
@@ -100,24 +100,20 @@ class LeagueTableFilter extends React.Component {
 
             <FormGroup style={{ marginLeft: 20 }}>
               <Select
-                name={'age-group-filter'}
+                name={Filter.AGE_GROUP}
                 placeholder={'Возрастная группа'}
-                value={selectedOption}
-                onChange={this.handleChange}
-                options={[
-                  { value: 'one', label: 'One' },
-                  { value: 'two', label: 'Two' },
-                ]}
+                value={selectedFilters[Filter.AGE_GROUP]}
+                onChange={(val) => this.selectFilter(Filter.AGE_GROUP, val)}
+                options={filters[Filter.AGE_GROUP]}
                 style={{ width: 160, height: 34 }}
                 menuStyle={{ minWidth: 160 }}
               />
             </FormGroup>
 
-            {' '}
-
             <FormGroup style={{ marginLeft: 20 }}>
               <Button
-                bsStyle="info"
+                bsStyle={selectedFilters[Filter.SUB20] === true ? "info" : 'default'}
+                onClick={() => this.selectFilter(Filter.CITY, !selectedFilters[Filter.SUB20])}
               >
                 SUB20
               </Button>
