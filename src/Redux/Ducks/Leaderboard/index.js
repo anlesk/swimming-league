@@ -30,7 +30,9 @@ export default function reducer(leaderboard = initialState, action = {}) {
 }
 
 // Action Creators for Reducers
-export const loadLeaderboardAC = () => createAction(LOAD_LEADERBOARD);
+
+// Action Creators for Sagas
+export const loadLeaderboardSagaAC = () => createAction(LOAD_LEADERBOARD);
 
 // Selectors
 export const getLeaderboard = state => state.leaderboard;

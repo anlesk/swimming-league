@@ -4,9 +4,10 @@ import { connect } from 'react-redux';
 
 import LeagueTable from '../../Components/LeagueTable2';
 import LeagueTableFilter from '../../Components/LeagueTableFilter';
+import Status from '../../../Enums/Status';
 
 import {
-  loadLeaderboardAC,
+  loadLeaderboardSagaAC,
   getLeaderboard,
 } from '../../../Redux/Ducks/Leaderboard';
 import {
@@ -14,30 +15,17 @@ import {
   getSelectedFilters,
   selectFilterAC,
   clearFiltersAC,
+  getFiltersStatus,
 } from '../../../Redux/Ducks/Filters';
 import {
   getStatistics,
   loadStatisticsAC,
 } from '../../../Redux/Ducks/Statistics';
 
-const loadData = async ({ sortBy, sortDirection, size, offset } = {}) => await ([
-  { position: 1, name: '123', sex: 333, phone: 12345 },
-  { position: 2, name: 321, sex: 542, phone: 12346 },
-  { position: 3, name: 321, sex: 4321, phone: 12347 },
-]);
-
-const loadGroupedData = async id => {
-  await new Promise(resolve => setTimeout(resolve, 1000));
-  return [
-    { position: 4, name: 'Ivanov', sex: 'M', phone: 12346, result: 1000, eventDate: 10 },
-    { position: 4, name: 'Ivanov', sex: 'M', phone: 12346, result: 1111, eventDate: 11 },
-    { position: 4, name: 'Ivanov', sex: 'M', phone: 12346, result: 1234, eventDate: 12 },
-  ]
-};
 
 class LeagueContainer extends React.Component {
   componentDidMount() {
-   this.props.loadLeaderboardAC();
+    this.props.loadLeaderboardSagaAC();
   }
 
   handleChangeFilter = (filter, value) => {
@@ -54,7 +42,10 @@ class LeagueContainer extends React.Component {
       statistics,
       filters,
       selectedFilters,
+      filtersStatus,
     } = this.props;
+
+    const isFiltersDisabled = filtersStatus === Status.LOADING;
 
     return (
       <Grid>
@@ -71,6 +62,7 @@ class LeagueContainer extends React.Component {
             selectedFilters={selectedFilters}
             onChangeFilter={this.handleChangeFilter}
             onClearFilters={this.props.clearFiltersAC}
+            disabled={isFiltersDisabled}
           />
         </Row>
 
@@ -94,8 +86,9 @@ export default connect(state => ({
   statistics: getStatistics(state),
   filters: getFiltersAll(state),
   selectedFilters: getSelectedFilters(state),
+  filtersStatus: getFiltersStatus(state),
 }), {
-  loadLeaderboardAC,
+  loadLeaderboardSagaAC,
   loadStatisticsAC,
   selectFilterAC,
   clearFiltersAC

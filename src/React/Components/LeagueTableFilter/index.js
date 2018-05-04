@@ -11,6 +11,7 @@ import {
 } from 'react-bootstrap';
 import 'react-select/dist/react-select.css';
 
+import Status from '../../../Enums/Status';
 import './styles/main.css'
 
 const Filter = {
