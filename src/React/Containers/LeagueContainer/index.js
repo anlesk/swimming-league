@@ -70,8 +70,8 @@ class LeagueContainer extends React.Component {
 
         <Row>
           <LeagueTable
-            data={leaderboard}
-            groupedData={statistics}
+            leaderboard={leaderboard}
+            statistics={statistics}
             onStatisticsRequest={this.handleStatisticsRequest}
             onShowMore={this.handleShowMore}
           />

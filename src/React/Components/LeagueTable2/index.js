@@ -67,13 +67,11 @@ class LeagueTable extends React.Component {
     this.props.getData({ sortBy, sortDirection });
   }
 
-  getGroupedData = id => this.props.getGroupedData(id);
-
   renderDataRow = (rowData, idx) => {
     const { expanded } = this.state;
-    const { groupedData = {} } = this.props;
-    const groupedRowData = get(groupedData, `${rowData.phone}.items`, []);
-    const groupedRowStatus = get(groupedData, `${rowData.phone}.status`);
+    const { statistics = {} } = this.props;
+    const statisticsRow = get(statistics, `${rowData.phone}.items`, []);
+    const statisticsStatus = get(statistics, `${rowData.phone}.status`);
     const isRowExpanded = expanded === idx;
     const basicRow = (
       <ListGroupItem
@@ -97,7 +95,7 @@ class LeagueTable extends React.Component {
       </ListGroupItem>
     );
 
-    const getExpandedRows = () => groupedRowData.map(data => {
+    const getExpandedRows = () => statisticsRow.map(data => {
       const { position, name, city, ...shortenData } = data;
 
       return (
@@ -125,7 +123,7 @@ class LeagueTable extends React.Component {
       <React.Fragment key={rowData.phone}>
         {basicRow}
         {
-          groupedRowStatus === Status.LOADING
+          statisticsStatus === Status.LOADING
             ? loadingElement
             : isRowExpanded && getExpandedRows()
         }
@@ -169,7 +167,7 @@ class LeagueTable extends React.Component {
   expandRow = (rowData, idx) => {
     const { expanded: currentlyExpanded } = this.state;
     this.setState({ expanded: currentlyExpanded === idx ? null : idx });
-    this.getGroupedData(rowData.phone);
+    this.props.onStatisticsRequest(rowData.phone);
   }
 
   hoverRow = idx => {
@@ -188,7 +186,7 @@ class LeagueTable extends React.Component {
 
   render() {
     const {
-      data: {
+      leaderboard: {
         status: dataStatus,
         items: dataItems = [],
       },
