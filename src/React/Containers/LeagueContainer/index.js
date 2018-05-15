@@ -22,10 +22,14 @@ import {
   loadStatisticsAC,
 } from '../../../Redux/Ducks/Statistics';
 
+import { run, runFetch } from '../../../Services/GraphQLService'
+
 
 class LeagueContainer extends React.Component {
   componentDidMount() {
     this.props.loadLeaderboardSagaAC();
+    // run();
+    runFetch();
   }
 
   handleChangeFilter = (filter, value) => {
