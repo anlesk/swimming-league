@@ -93,18 +93,18 @@ class LeagueContainer extends React.Component {
   }
 }
 
-export default connect(state => ({
-  leaderboard: getLeaderboard(state),
-  statistics: getStatistics(state),
-  filters: getFiltersAll(state),
-  selectedFilters: getSelectedFilters(state),
-  filtersStatus: getFiltersStatus(state),
-}), {
-  loadLeaderboardSagaAC,
-  loadStatisticsAC,
-  selectFilterAC,
-  clearFiltersAC
-})(LeagueContainer);
+// export default connect(state => ({
+//   leaderboard: getLeaderboard(state),
+//   statistics: getStatistics(state),
+//   filters: getFiltersAll(state),
+//   selectedFilters: getSelectedFilters(state),
+//   filtersStatus: getFiltersStatus(state),
+// }), {
+//   loadLeaderboardSagaAC,
+//   loadStatisticsAC,
+//   selectFilterAC,
+//   clearFiltersAC
+// })(LeagueContainer);
 
 export default createFragmentContainer(LeagueContainer, graphql`
   fragment LeagueContainer_leaderboard on Link {
