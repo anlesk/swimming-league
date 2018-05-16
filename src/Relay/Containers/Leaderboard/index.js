@@ -25,7 +25,7 @@ import {
 } from '../../../Redux/Ducks/Statistics';
 
 
-class LeagueContainer extends React.Component {
+class LeaderboardContainer extends React.Component {
   componentDidMount() {
     this.props.loadLeaderboardSagaAC();
   }
@@ -106,10 +106,8 @@ class LeagueContainer extends React.Component {
 //   clearFiltersAC
 // })(LeagueContainer);
 
-export default createFragmentContainer(LeagueContainer, graphql`
-  fragment LeagueContainer_leaderboard on Link {
-    id
-    description
-    url
+export default createFragmentContainer(LeaderboardContainer, graphql`
+  fragment LeaderboardContainer_leaderboard on ControlLessonResultConnection {
+    edges
   }
 `)

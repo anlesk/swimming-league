@@ -211,7 +211,7 @@ class LeagueTable extends React.Component {
 }
 
 export default createFragmentContainer(LeagueTable, graphql`
-  fragment LeagueTable_leaderboard on LeagueTable {
+  fragment Table_leaderboard on ControlLessonResult {
     id
     description
     url
