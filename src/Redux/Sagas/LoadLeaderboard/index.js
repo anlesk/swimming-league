@@ -1,5 +1,4 @@
-import { takeEvery, call, select } from 'redux-saga/effects';
-import { putStart, putSuccess, putFail } from '../Utils/Suffix';
+import { takeEvery, call, select, put } from 'redux-saga/effects';
 
 import {
   LOAD_LEADERBOARD,
@@ -9,25 +8,40 @@ import {
   getSelectedFilters,
 } from '../../Ducks/Filters';
 import Services from '../../../Services';
+import { createStartAction, createSuccessAction, createFailAction } from "../../Utils/withSuffix";
 
 
 export function* loadLeaderboard() {
   try {
-    yield call(putStart, LOAD_LEADERBOARD);
+    const loadLeaderboardStart = yield call(createStartAction, LOAD_LEADERBOARD);
+    yield put(loadLeaderboardStart);
+
     for (const filter in ['city', 'sex', 'ageGroup']) {
-      yield call(putStart, LOAD_FILTER, { filter });
+      const loadFilterStart = yield call(createStartAction, LOAD_FILTER, { filter });
+      yield put(loadFilterStart);
     }
-    yield call(putStart, LOAD_LEADERBOARD);
     const filters = yield select(getSelectedFilters);
-    const result = yield call(Services.LeagueService.getLeaderboard, filters);
-    for (const filter in ['city', 'sex', 'ageGroup']) {
-      yield call(putStart, LOAD_FILTER, { filter });
-    }
-    yield call(putSuccess, LOAD_LEADERBOARD, result);
+    const {
+      ageGroups,
+      controlLessonResultsConnection,
+    } = yield call(Services.GraphQLService.loadData, filters);
+
+    const loadLeaderboardSuccess = yield call(createSuccessAction, LOAD_LEADERBOARD, controlLessonResultsConnection);
+    yield put(loadLeaderboardSuccess);
+
+    const loadFilterSuccess = yield call(createSuccessAction, LOAD_FILTER, { filter: 'ageGroup', items: ageGroups });
+    yield put(loadFilterSuccess);
+
+    // yield call(putSuccess, LOAD_FILTER, { filter: 'city', items: cities });
+    // yield call(putSuccess, LOAD_FILTER, { filter: 'sex', items: cities });
+    // yield call(putSuccess, LOAD_LEADERBOARD, controlLessonResultsConnection);
   } catch (e) {
-    yield call(putFail, LOAD_LEADERBOARD);
+    const loadLeaderboardFail = yield call(createFailAction, LOAD_LEADERBOARD);
+    yield put(loadLeaderboardFail);
+
     for (const filter in ['city', 'sex', 'ageGroup']) {
-      yield call(putFail, LOAD_FILTER, { filter });
+      const loadFilterFail = yield call(createFailAction, LOAD_FILTER, { filter });
+      yield put(loadFilterFail);
     }
   }
 }

@@ -11,17 +11,17 @@ const initialState = {};
 export default function reducer(leaderboard = initialState, action = {}) {
   const { type, payload } = action;
   switch (type) {
-    case [withStart(LOAD_LEADERBOARD)]: {
+    case withStart(LOAD_LEADERBOARD): {
       return { ...leaderboard, status: Status.LOADING };
     }
 
-    case [withFail(LOAD_LEADERBOARD)]: {
+    case withFail(LOAD_LEADERBOARD): {
       return { ...leaderboard, status: Status.LOADING };
     }
 
-    case [withSuccess(LOAD_LEADERBOARD)]: {
-      const { items } = payload;
-      return { items, status: Status.SUCCESS };
+    case withSuccess(LOAD_LEADERBOARD): {
+      const { pageInfo, edges } = payload;
+      return { edges, status: Status.SUCCESS };
     }
 
     default:

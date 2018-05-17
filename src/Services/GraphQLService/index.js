@@ -1,4 +1,5 @@
 import axios from 'axios';
+import data from './mocks/data';
 
 const query = `
 {
@@ -60,7 +61,7 @@ export const run = () => axios({
   });
 
 export const runFetch = () => fetch('https://api.supersport.online/graphql', {
-  // body:  JSON.stringify({ query }),
+  // body:  JSON.stringify({ query: query.replace('\r', '') }),
   body:  JSON.stringify(stringifiedQ),
   // body:  { query },
   method: 'POST',
@@ -85,3 +86,5 @@ export const eF = () => fetch('https://1jzxrj179.lp.gql.zone/graphql', {
 })
   .then(res => res.json())
   .then(res => console.log(res.data));
+
+export const loadData = (filters) => data.data;

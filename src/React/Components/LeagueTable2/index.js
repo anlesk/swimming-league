@@ -18,27 +18,38 @@ import './styles/style.css';
 const cols = {
   position: {
     width: '8%',
+    getValue: ({ rating, ratingInAgeGroup }) => `${rating}/${ratingInAgeGroup}`,
+    hideIfExpanded: true,
   },
   name: {
     width: '20%',
+    getValue: ({ student: { name } = {} }) => name,
+    hideIfExpanded: true,
   },
   city: {
     width: '19%',
+    getValue: ({ city }) => city,
+    hideIfExpanded: true,
   },
   sex: {
     width: '5%',
+    getValue: ({ sex }) => sex,
   },
   ageGroup: {
     width: '16%',
+    getValue: ({ ageGroup }) => ageGroup,
   },
   result: {
     width: '10%',
+    getValue: ({ totalTime }) => totalTime,
   },
   eventDate: {
     width: '10%',
+    getValue: ({ controlLesson: { date } = {} }) => date,
   },
   sub20: {
     width: '7%',
+    getValue: ({ totalTime }) => totalTime < 20 * 60 * 60,
   },
 }
 
@@ -67,28 +78,29 @@ class LeagueTable extends React.Component {
     this.props.getData({ sortBy, sortDirection });
   }
 
-  renderDataRow = (rowData, idx) => {
+  renderDataRow = (node, idx) => {
     const { expanded } = this.state;
     const { statistics = {} } = this.props;
-    const statisticsRow = get(statistics, `${rowData.phone}.items`, []);
-    const statisticsStatus = get(statistics, `${rowData.phone}.status`);
+    const statisticsRow = get(statistics, `${node.phone}.items`, []);
+    const statisticsStatus = get(statistics, `${node.phone}.status`);
     const isRowExpanded = expanded === idx;
+
     const basicRow = (
       <ListGroupItem
-        key={rowData.phone}
+        key={node.phone}
         onMouseOver={() => this.hoverRow(idx)}
-        onClick={() => this.expandRow(rowData, idx)}
+        onClick={() => this.expandRow(node, idx)}
         className={classnames('data-row', isRowExpanded && 'expanded-data-row')}
       >
         {Object.keys(cols).map((id) => {
-          const { width } = cols[id];
+          const { width, getValue } = cols[id];
 
           return (
             <Col
               key={id}
               style={{ width }}
             >
-              {rowData[id]}
+              {getValue(node)}
             </Col>
           )
         })}
@@ -96,7 +108,6 @@ class LeagueTable extends React.Component {
     );
 
     const getExpandedRows = () => statisticsRow.map(data => {
-      const { position, name, city, ...shortenData } = data;
 
       return (
         <ListGroupItem
@@ -104,14 +115,14 @@ class LeagueTable extends React.Component {
           className='expanded-data-row'
         >
           {Object.keys(cols).map((id) => {
-            const { width } = cols[id];
+            const { width, getValue, hideIfExpanded } = cols[id];
 
             return (
               <Col
                 key={id}
                 style={{ width }}
               >
-                {shortenData[id]}
+                {!hideIfExpanded && getValue(data)}
               </Col>
             )
           })}
@@ -120,7 +131,7 @@ class LeagueTable extends React.Component {
     });
 
     return (
-      <React.Fragment key={rowData.phone}>
+      <React.Fragment key={node.phone}>
         {basicRow}
         {
           statisticsStatus === Status.LOADING
@@ -164,10 +175,10 @@ class LeagueTable extends React.Component {
     )
   }
 
-  expandRow = (rowData, idx) => {
+  expandRow = (node, idx) => {
     const { expanded: currentlyExpanded } = this.state;
     this.setState({ expanded: currentlyExpanded === idx ? null : idx });
-    this.props.onStatisticsRequest(rowData.phone);
+    this.props.onStatisticsRequest(node.phone);
   }
 
   hoverRow = idx => {
@@ -188,7 +199,7 @@ class LeagueTable extends React.Component {
     const {
       leaderboard: {
         status: dataStatus,
-        items: dataItems = [],
+        edges: dataItems = [],
       },
     } = this.props;
 
@@ -201,7 +212,7 @@ class LeagueTable extends React.Component {
         {
           dataStatus === Status.LOADING
             ? loadingElement
-            : dataItems.map((rowData, idx) => this.renderDataRow(rowData, idx))
+            : dataItems.map(({ node }, idx) => this.renderDataRow(node, idx))
         }
       </ListGroup>
     );

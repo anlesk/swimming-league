@@ -1,3 +1,5 @@
+import * as GraphQLService from './GraphQLService';
+
 const loadData = async ({ sortBy, sortDirection, size, offset } = {}) => await ([
   { position: 1, name: '123', sex: 333, phone: 12345 },
   { position: 2, name: 321, sex: 542, phone: 12346 },
@@ -27,4 +29,5 @@ export default {
    getLeaderboard: loadData,
    getStatistics: loadGroupedData,
  },
+  GraphQLService,
 }
