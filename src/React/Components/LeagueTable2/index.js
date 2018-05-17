@@ -9,6 +9,7 @@ import SortDescIcon from 'react-icons/lib/md/arrow-drop-down';
 import classnames from 'classnames';
 import { get } from 'lodash';
 import { PulseLoader } from 'react-spinners';
+import moment from 'moment';
 
 import Status from '../../../Enums/Status';
 import SortDirection from '../../../Enums/SortDirection';
@@ -41,7 +42,7 @@ const cols = {
   },
   result: {
     width: '10%',
-    getValue: ({ totalTime }) => totalTime,
+    getValue: ({ totalTime }) => moment(totalTime).format('HH:mm:ss'),
   },
   eventDate: {
     width: '10%',
