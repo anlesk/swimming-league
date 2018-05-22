@@ -21,7 +21,11 @@ import {
   getStatistics,
   loadStatisticsAC,
 } from '../../../Redux/Ducks/Statistics';
-
+import {
+  getSortBy,
+  getSortDirection,
+  changeSortByAC,
+} from '../../../Redux/Ducks/Sort';
 
 class LeagueContainer extends React.Component {
   componentDidMount() {
@@ -43,6 +47,8 @@ class LeagueContainer extends React.Component {
       filters,
       selectedFilters,
       filtersStatus,
+      sortBy,
+      sortDirection,
     } = this.props;
 
     const isFiltersDisabled = filtersStatus === Status.LOADING;
@@ -72,8 +78,11 @@ class LeagueContainer extends React.Component {
           <LeagueTable
             leaderboard={leaderboard}
             statistics={statistics}
+            sortBy={sortBy}
+            sortDirection={sortDirection}
             onStatisticsRequest={this.handleStatisticsRequest}
             onShowMore={this.handleShowMore}
+            onSortChange={this.props.changeSortByAC}
           />
         </Row>
       </Grid>
@@ -87,9 +96,12 @@ export default connect(state => ({
   filters: getFiltersAll(state),
   selectedFilters: getSelectedFilters(state),
   filtersStatus: getFiltersStatus(state),
+  sortBy: getSortBy(state),
+  sortDirection: getSortDirection(state),
 }), {
   loadLeaderboardSagaAC,
   loadStatisticsAC,
   selectFilterAC,
-  clearFiltersAC
+  clearFiltersAC,
+  changeSortByAC,
 })(LeagueContainer);

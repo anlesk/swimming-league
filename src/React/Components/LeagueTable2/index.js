@@ -69,14 +69,7 @@ class LeagueTable extends React.Component {
 
     this.state = {
       hoveredRowId: null,
-      sortBy: 'position',
-      sortDirection: SortDirection.ASC,
     }
-  }
-
-  getData = () => {
-    const { sortBy, sortDirection } = this.state;
-    this.props.getData({ sortBy, sortDirection });
   }
 
   renderDataRow = (node, idx) => {
@@ -149,7 +142,7 @@ class LeagueTable extends React.Component {
   }
 
   renderHeaderCol = id => {
-    const { sortBy, sortDirection } = this.state;
+    const { sortBy, sortDirection } = this.props;
     const SortDirectionIcon = sortDirection === SortDirection.DESC ? SortDescIcon : SortAscIcon;
 
     return (
@@ -196,9 +189,7 @@ class LeagueTable extends React.Component {
   }
 
   sort = id => {
-    const { sortBy, sortDirection: oldSD } = this.state;
-    const sortDirection = sortBy === id && oldSD === SortDirection.ASC ? SortDirection.DESC : SortDirection.ASC;
-    this.setState({ sortBy: id, sortDirection });
+    this.props.onSortChange(id);
   }
 
   render() {
@@ -208,8 +199,6 @@ class LeagueTable extends React.Component {
         edges: dataItems = [],
       },
     } = this.props;
-
-    console.log(this.props);
 
     return (
       <ListGroup>
