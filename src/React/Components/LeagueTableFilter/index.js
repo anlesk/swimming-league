@@ -32,9 +32,9 @@ class LeagueTableFilter extends React.Component {
     this.selectFilter(Filter.NAME, this.input.value);
   };
 
-  handleInputChange = (e) => console.log(e.target.value);
+  handleInputChange = (e) => this.selectFilter(Filter.NAME, this.input.value);
 
-  selectFilter = (filter, value) => this.props.onChangeFilter(filter, value)
+  selectFilter = (filter, value) => this.props.onChangeFilter(filter, value);
 
   render() {
     const {
