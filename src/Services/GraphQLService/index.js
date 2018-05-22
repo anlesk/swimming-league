@@ -43,7 +43,7 @@ const query = `
 
 const stringifiedQ = { query: "{ ageGroups { id name minAge maxAge } controlLessonResultsConnection(first:700) { totalCount pageInfo { hasNextPage hasPreviousPage endCursor } edges { cursor node { rating ratingInAgeGroup totalTime student { name gender } ageGroup { id name minAge maxAge } controlLesson { date } } } }}"};
 
-console.log(query, JSON.stringify({ query }), stringifiedQ);
+// console.log(query, JSON.stringify({ query }), stringifiedQ);
 
 export const run = () => axios({
     method: 'POST',
@@ -87,4 +87,8 @@ export const eF = () => fetch('https://1jzxrj179.lp.gql.zone/graphql', {
   .then(res => res.json())
   .then(res => console.log(res.data));
 
-export const loadData = (filters) => data.data;
+export const loadData = (filters) => new Promise((resolve) => {
+  setTimeout(resolve.bind(this, getFilteredData(filters)), 800);
+});
+
+const getFilteredData = filters => data.data;
