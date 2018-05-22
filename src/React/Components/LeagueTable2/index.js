@@ -18,37 +18,52 @@ import './styles/style.css';
 
 const cols = {
   position: {
+    id: 'rating',
     width: '8%',
     getValue: ({ rating, ratingInAgeGroup }) => `${rating}/${ratingInAgeGroup}`,
     hideIfExpanded: true,
+    sortable: true,
   },
   name: {
+    id: 'name',
     width: '20%',
     getValue: ({ student: { name } = {} }) => name,
     hideIfExpanded: true,
+    sortable: true,
   },
   city: {
+    id: 'city',
     width: '19%',
     getValue: ({ city }) => city,
     hideIfExpanded: true,
+    sortable: true,
   },
   sex: {
+    id: 'sex',
     width: '5%',
     getValue: ({ sex }) => sex,
+    sortable: true,
   },
   ageGroup: {
+    id: 'ageGroup',
     width: '16%',
     getValue: ({ ageGroup }) => ageGroup,
+    sortable: true,
   },
   result: {
+    id: 'totalTime',
     width: '10%',
     getValue: ({ totalTime }) => moment(totalTime).format('HH:mm:ss'),
+    sortable: true,
   },
   eventDate: {
+    id: 'date',
     width: '10%',
     getValue: ({ controlLesson: { date } = {} }) => date,
+    sortable: true,
   },
   sub20: {
+    id: 'sub20',
     width: '7%',
     getValue: ({ totalTime }) => totalTime < 20 * 60 * 60,
   },
@@ -87,12 +102,12 @@ class LeagueTable extends React.Component {
         onClick={() => this.expandRow(node, idx)}
         className={classnames('data-row', isRowExpanded && 'expanded-data-row')}
       >
-        {Object.keys(cols).map((id) => {
-          const { width, getValue } = cols[id];
+        {Object.keys(cols).map((colName) => {
+          const { width, getValue } = cols[colName];
 
           return (
             <Col
-              key={id}
+              key={colName}
               style={{ width }}
             >
               {getValue(node)}
@@ -113,12 +128,12 @@ class LeagueTable extends React.Component {
           key={`${date}_${totalTime}`}
           className='expanded-data-row'
         >
-          {Object.keys(cols).map((id) => {
-            const { width, getValue, hideIfExpanded } = cols[id];
+          {Object.keys(cols).map((colName) => {
+            const { width, getValue, hideIfExpanded } = cols[colName];
 
             return (
               <Col
-                key={id}
+                key={colName}
                 style={{ width }}
               >
                 {!hideIfExpanded && getValue(data)}
@@ -157,16 +172,16 @@ class LeagueTable extends React.Component {
       <ListGroupItem
         className='header-row'
       >
-        {Object.keys(cols).map((id) => {
-          const { width } = cols[id];
+        {Object.keys(cols).map((colName) => {
+          const { width, id, sortable } = cols[colName];
 
           return (
             <Col
-              key={id}
+              key={colName}
               style={{ width }}
-              onClick={() => this.sort(id)}
+              onClick={sortable && (() => this.sort(id))}
             >
-              {this.renderHeaderCol(id)}
+              {this.renderHeaderCol(colName)}
             </Col>
           )
         })}
