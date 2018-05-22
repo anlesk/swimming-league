@@ -28,31 +28,31 @@ function selectFilter(filters, filterType, payload) {
 export default function reducer(filters = initialState, action = {}) {
   const { type, payload } = action;
   switch (type) {
-    case [withStart(LOAD_FILTERS)]: {
+    case withStart(LOAD_FILTERS): {
       return { ...filters, status: Status.LOADING };
     }
 
-    case [withFail(LOAD_FILTERS)]: {
+    case withFail(LOAD_FILTERS): {
       return { ...filters, status: Status.FAIL };
     }
 
-    case [withSuccess(LOAD_FILTERS)]: {
+    case withSuccess(LOAD_FILTERS): {
       return { ...filters, status: Status.SUCCESS };
     }
 
-    case [withStart(LOAD_FILTER)]: {
+    case withStart(LOAD_FILTER): {
       const { filter } = payload;
       const { values, ...rest } = filters;
       return { ...rest, values: { ...values, [filter]: { status: Status.LOADING }} };
     }
 
-    case [withFail(LOAD_FILTER)]: {
+    case withFail(LOAD_FILTER): {
       const { filter } = payload;
       const { values, ...rest } = filters;
       return { ...rest, values: { ...values, [filter]: { status: Status.FAIL }} };
     }
 
-    case [withSuccess(LOAD_FILTER)]: {
+    case withSuccess(LOAD_FILTER): {
       const { filter, items } = payload;
       return saveFilter(filters, filter, items);
     }

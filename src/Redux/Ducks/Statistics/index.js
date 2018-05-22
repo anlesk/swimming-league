@@ -13,19 +13,19 @@ const initialState = {};
 export default function reducer(statistics = initialState, action = {}) {
   const { type, payload } = action;
   switch (type) {
-    case [withStart(LOAD_STATISTICS)]: {
+    case withStart(LOAD_STATISTICS): {
       const { id } = payload;
       const items = get(statistics, `${id}.items`);
       return { ...statistics, [id]: { items, status: Status.LOADING }};
     }
 
-    case [withFail(LOAD_STATISTICS)]: {
+    case withFail(LOAD_STATISTICS): {
       const { id } = payload;
       const items = get(statistics, `${id}.items`);
       return { ...statistics, [id]: { items, status: Status.FAIL }};
     }
 
-    case [withSuccess(LOAD_STATISTICS)]: {
+    case withSuccess(LOAD_STATISTICS): {
       const { id, items } = payload;
       return { ...statistics, [id]: { items, status: Status.SUCCESS }};
     }
