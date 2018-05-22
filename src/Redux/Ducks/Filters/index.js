@@ -37,8 +37,8 @@ export default function reducer(filters = initialState, action = {}) {
     }
 
     case withSuccess(LOAD_FILTERS): {
-      const { filters } = payload;
-      return { ...filters, values: filters, status: Status.SUCCESS };
+      const { filters: newFilters } = payload;
+      return { ...filters, values: newFilters, status: Status.SUCCESS };
     }
 
     case withStart(LOAD_FILTER): {

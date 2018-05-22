@@ -32,6 +32,8 @@ class LeagueTableFilter extends React.Component {
     this.selectFilter(Filter.NAME, this.input.value);
   };
 
+  handleInputChange = (e) => console.log(e.target.value);
+
   selectFilter = (filter, value) => this.props.onChangeFilter(filter, value)
 
   render() {
@@ -62,8 +64,9 @@ class LeagueTableFilter extends React.Component {
                   onKeyDown={this.handleKeyDown}
                   name={Filter.NAME}
                   type='text'
-                  defaultValue={selectedFilters[Filter.NAME]}
+                  value={selectedFilters[Filter.NAME]}
                   inputRef={(ref) => {this.input = ref}}
+                  onChange={this.handleInputChange}
                   placeholder='Введите имя'
                   disabled={disabled}
                 />
