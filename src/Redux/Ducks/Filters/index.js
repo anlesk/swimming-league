@@ -12,7 +12,7 @@ export const CLEAR_FILTER = 'CLEAR_FILTER';
 const initialState = {
   status: {},
   values: {},
-``  selected: {
+  selected: {
     name: '',
   },
 };
