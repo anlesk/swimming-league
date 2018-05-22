@@ -156,14 +156,14 @@ class LeagueTable extends React.Component {
     )
   }
 
-  renderHeaderCol = id => {
+  renderHeaderCol = colName => {
     const { sortBy, sortDirection } = this.props;
     const SortDirectionIcon = sortDirection === SortDirection.DESC ? SortDescIcon : SortAscIcon;
 
     return (
-    <React.Fragment key={id}>
-      <span>{locales[id]}</span>
-      {id === sortBy && <SortDirectionIcon />}
+    <React.Fragment key={colName}>
+      <span>{locales[colName]}</span>
+      {cols[colName].id === sortBy && <SortDirectionIcon />}
     </React.Fragment>
   )}
 
