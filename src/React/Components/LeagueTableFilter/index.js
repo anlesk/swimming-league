@@ -82,6 +82,9 @@ class LeagueTableFilter extends React.Component {
                 name={Filter.CITY}
                 value={selectedFilters[Filter.CITY]}
                 placeholder={'Город'}
+                labelKey={'name'}
+                valueKey={'id'}
+                clearable={false}
                 onChange={(val) => this.selectFilter(Filter.CITY, val)}
                 options={filters[Filter.CITY]}
                 style={{ minWidth: 160 }}
@@ -94,6 +97,9 @@ class LeagueTableFilter extends React.Component {
               <Select
                 name={Filter.SEX}
                 placeholder='Пол'
+                labelKey={'name'}
+                valueKey={'id'}
+                clearable={false}
                 value={selectedFilters[Filter.SEX]}
                 onChange={(val) => this.selectFilter(Filter.SEX, val)}
                 options={filters[Filter.SEX]}
@@ -107,6 +113,9 @@ class LeagueTableFilter extends React.Component {
               <Select
                 name={Filter.AGE_GROUP}
                 placeholder={'Возрастная группа'}
+                labelKey={'name'}
+                valueKey={'id'}
+                clearable={false}
                 value={selectedFilters[Filter.AGE_GROUP]}
                 onChange={(val) => this.selectFilter(Filter.AGE_GROUP, val)}
                 options={filters[Filter.AGE_GROUP]}
