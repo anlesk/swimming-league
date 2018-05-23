@@ -59,11 +59,15 @@ class LeagueContainer extends React.Component {
   }
 
   handleClearFilters = () => {
-    //TODO: Dirty hack, think of how to clear input value without changing the component API
-    this.leagueTableFilter.input.value = '';
+    this.clearNameFilter();
     this.props.clearFiltersAC();
     this.props.loadLeaderboardSagaAC();
     this.props.hideStatisticsAC();
+  }
+
+  clearNameFilter = () => {
+    //TODO: Dirty hack, think of how to clear input value without changing the component API
+    this.leagueTableFilter.input.value = '';
   }
 
   render() {
