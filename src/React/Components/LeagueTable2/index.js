@@ -90,16 +90,16 @@ class LeagueTable extends React.Component {
   renderDataRow = (node, idx) => {
     const { expanded } = this.state;
     const { statistics = {} } = this.props;
-    const { phone, rating } = node;
-    const statisticsRow = get(statistics, `${node.phone}.items`, []);
-    const statisticsStatus = get(statistics, `${node.phone}.status`);
+    const { phone, rating, student: { name } = {} } = node;
+    const statisticsRow = get(statistics, `${phone}.items`, []);
+    const statisticsStatus = get(statistics, `${phone}.status`);
     const isRowExpanded = expanded === idx;
     const key = phone || rating;
 
     const basicRow = (
       <ListGroupItem
         onMouseOver={() => this.hoverRow(idx)}
-        onClick={() => this.expandRow(node, idx)}
+        onClick={() => this.expandRow(name, idx)}
         className={classnames('data-row', isRowExpanded && 'expanded-data-row')}
       >
         {Object.keys(cols).map((colName) => {
@@ -189,10 +189,10 @@ class LeagueTable extends React.Component {
     )
   }
 
-  expandRow = (node, idx) => {
+  expandRow = (personId, idx) => {
     const { expanded: currentlyExpanded } = this.state;
     this.setState({ expanded: currentlyExpanded === idx ? null : idx });
-    this.props.onStatisticsRequest(node.phone);
+    this.props.onStatisticsRequest(personId);
   }
 
   hoverRow = idx => {
