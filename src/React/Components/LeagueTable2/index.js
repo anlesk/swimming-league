@@ -221,17 +221,15 @@ class LeagueTable extends React.Component {
     } = this.props;
 
     return (
-      <React.Fragment>
+      <ListGroup>
         {this.renderHeader()}
         <hr style={{ margin: '1px 0px 1px 0px' }} />
-        <ListGroup>
-          {
-            dataStatus === Status.LOADING
-              ? loadingElement
-              : dataItems.map(({ node }, idx) => this.renderDataRow(node, idx))
-          }
-        </ListGroup>
-      </React.Fragment>
+        {
+          dataStatus === Status.LOADING
+            ? loadingElement
+            : dataItems.map(({ node }, idx) => this.renderDataRow(node, idx))
+        }
+      </ListGroup>
     );
   }
 }
