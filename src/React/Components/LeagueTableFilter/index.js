@@ -10,7 +10,6 @@ import {
   Row,
 } from 'react-bootstrap';
 import 'react-select/dist/react-select.css';
-import { throttle } from 'lodash';
 
 import './styles/main.css'
 import Filter from '../../../Enums/Filter';
