@@ -12,9 +12,11 @@ export function* loadStatistics({ payload: { id } = {} }) {
     const loadStatisticsStart = yield call(createStartAction, LOAD_STATISTICS, { id });
     yield put(loadStatisticsStart);
 
-    const result = yield call(Services.GraphQLService.loadStatistics, id);
+    const {
+      controlLessonResultsConnection: { edges = [] } = {},
+    } = yield call(Services.GraphQLService.loadStatistics, id);
 
-    const loadStatisticsSuccess = yield call(createSuccessAction, LOAD_STATISTICS, { id, items: result });
+    const loadStatisticsSuccess = yield call(createSuccessAction, LOAD_STATISTICS, { id, items: edges });
     yield put(loadStatisticsSuccess);
   } catch (e) {
     const loadStatisticsFail = yield call(createFailAction, LOAD_STATISTICS, { id });

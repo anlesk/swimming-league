@@ -91,15 +91,16 @@ class LeagueTable extends React.Component {
     const { expanded } = this.state;
     const { statistics = {} } = this.props;
     const { phone, rating, student: { name } = {} } = node;
-    const statisticsRow = get(statistics, `${phone}.items`, []);
-    const statisticsStatus = get(statistics, `${phone}.status`);
+    const key = phone || `${name}_${rating}`;
+
+    const statisticsRow = get(statistics, `${key}.items`, []);
+    const statisticsStatus = get(statistics, `${key}.status`);
     const isRowExpanded = expanded === idx;
-    const key = phone || rating;
 
     const basicRow = (
       <ListGroupItem
         onMouseOver={() => this.hoverRow(idx)}
-        onClick={() => this.expandRow(name, idx)}
+        onClick={() => this.expandRow(key, idx)}
         className={classnames('data-row', isRowExpanded && 'expanded-data-row')}
       >
         {Object.keys(cols).map((colName) => {
@@ -117,11 +118,11 @@ class LeagueTable extends React.Component {
       </ListGroupItem>
     );
 
-    const getExpandedRows = () => statisticsRow.map(data => {
+    const getExpandedRows = () => statisticsRow.map(({ node }) => {
       const {
         controlLesson: { date } = {},
         totalTime,
-      } = data;
+      } = node;
 
       return (
         <ListGroupItem
@@ -129,14 +130,14 @@ class LeagueTable extends React.Component {
           className='expanded-data-row'
         >
           {Object.keys(cols).map((colName) => {
-            const { width, getValue, hideIfExpanded } = cols[colName];
+            const { width, getValue, hideIfExpanded = false } = cols[colName];
 
             return (
               <Col
                 key={colName}
                 style={{ width }}
               >
-                {!hideIfExpanded && getValue(data)}
+                {!hideIfExpanded && getValue(node)}
               </Col>
             )
           })}
