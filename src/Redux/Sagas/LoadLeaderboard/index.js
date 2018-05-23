@@ -12,7 +12,8 @@ import { createStartAction, createSuccessAction, createFailAction } from "../../
 import Filter from '../../../Enums/Filter';
 
 
-const loadableFilters = [Filter.CITY, Filter.AGE_GROUP, Filter.SEX].reduce((memo, filter) => ({ ...memo, [filter]: filter }), {});
+const loadableFilters = [Filter.CITY, Filter.AGE_GROUP, Filter.SEX]
+  .reduce((memo, filter) => ({ ...memo, [filter]: filter }), {});
 const sexFilterValues = [
   {
     id: 'male',
@@ -37,11 +38,13 @@ export function* loadLeaderboard() {
     yield put(loadFiltersStart);
 
     const filters = yield select(getSelectedFilters);
+    const filterIds = Object.entries(filters)
+      .reduce((memo, [key, value]) => ({ ...memo, [key]: value.id }), {})
     const {
       cities = [],
       ageGroups = [],
       controlLessonResultsConnection,
-    } = yield call(Services.GraphQLService.loadData, filters);
+    } = yield call(Services.GraphQLService.loadData, filterIds);
 
     const loadLeaderboardSuccess = yield call(createSuccessAction, LOAD_LEADERBOARD, controlLessonResultsConnection);
     yield put(loadLeaderboardSuccess);
