@@ -10,6 +10,7 @@ import {
   Row,
 } from 'react-bootstrap';
 import 'react-select/dist/react-select.css';
+import { throttle } from 'lodash';
 
 import './styles/main.css'
 
@@ -32,9 +33,11 @@ class LeagueTableFilter extends React.Component {
     this.selectFilter(Filter.NAME, this.input.value);
   };
 
-  handleInputChange = (e) => this.selectFilter(Filter.NAME, this.input.value);
-
   selectFilter = (filter, value) => this.props.onChangeFilter(filter, value);
+
+  handleInputChange = (e) => this.throttledInputChange(Filter.NAME, e.target.value);
+
+  throttledInputChange = throttle(this.selectFilter, 100);
 
   render() {
     const {
