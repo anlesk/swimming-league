@@ -1,0 +1,142 @@
+{
+  "data": {
+    "controlLessonResultsConnection": {
+      "totalCount": 136,
+      "pageInfo": {
+        "hasNextPage": true,
+        "hasPreviousPage": false,
+        "endCursor": "MTAw"
+      },
+      "edges": [
+        {
+          "cursor": "MQ==",
+          "node": {
+            "rating": 1,
+            "ratingInAgeGroup": 1,
+            "totalTime": 951000,
+            "student": {
+              "name": "Максим Ермолов",
+              "gender": null
+            },
+            "ageGroup": null,
+            "controlLesson": {
+              "date": "2018-03-04"
+            }
+          }
+        },
+        {
+          "cursor": "Mg==",
+          "node": {
+            "rating": 2,
+            "ratingInAgeGroup": 1,
+            "totalTime": 980000,
+            "student": {
+              "name": "Екатерина Сидорова",
+              "gender": null
+            },
+            "ageGroup": null,
+            "controlLesson": {
+              "date": "2018-04-01"
+            }
+          }
+        },
+        {
+          "cursor": "Mw==",
+          "node": {
+            "rating": 3,
+            "ratingInAgeGroup": 1,
+            "totalTime": 995000,
+            "student": {
+              "name": "Денис Назаров",
+              "gender": null
+            },
+            "ageGroup": null,
+            "controlLesson": {
+              "date": "2018-04-01"
+            }
+          }
+        },
+        {
+          "cursor": "NA==",
+          "node": {
+            "rating": 4,
+            "ratingInAgeGroup": 1,
+            "totalTime": 1012000,
+            "student": {
+              "name": "Денис Чайкин",
+              "gender": null
+            },
+            "ageGroup": null,
+            "controlLesson": {
+              "date": "2018-04-01"
+            }
+          }
+        },
+        {
+          "cursor": "NQ==",
+          "node": {
+            "rating": 5,
+            "ratingInAgeGroup": 1,
+            "totalTime": 1021000,
+            "student": {
+              "name": "Никита Лесин",
+              "gender": null
+            },
+            "ageGroup": null,
+            "controlLesson": {
+              "date": "2018-04-01"
+            }
+          }
+        },
+        {
+          "cursor": "Ng==",
+          "node": {
+            "rating": 6,
+            "ratingInAgeGroup": 1,
+            "totalTime": 1026000,
+            "student": {
+              "name": "Антон Овчинников",
+              "gender": null
+            },
+            "ageGroup": null,
+            "controlLesson": {
+              "date": "2018-03-04"
+            }
+          }
+        },
+        {
+          "cursor": "Nw==",
+          "node": {
+            "rating": 9,
+            "ratingInAgeGroup": 2,
+            "totalTime": 1057000,
+            "student": {
+              "name": "Василий Мариинский",
+              "gender": "MALE"
+            },
+            "ageGroup": null,
+            "controlLesson": {
+              "date": "2018-03-04"
+            }
+          }
+        },
+        {
+          "cursor": "OA==",
+          "node": {
+            "rating": 14,
+            "ratingInAgeGroup": 1,
+            "totalTime": 1057000,
+            "student": {
+              "name": "Василий Мариинский",
+              "gender": "MALE"
+            },
+            "ageGroup": null,
+            "controlLesson": {
+              "date": "2018-04-01"
+            }
+          }
+        }
+      ]
+    }
+  }
+}

@@ -1,5 +1,6 @@
 import axios from 'axios';
 import data from './mocks/data';
+import statistics from './mocks/statistics';
 
 const query = `
 {
@@ -91,4 +92,9 @@ export const loadData = (filters) => new Promise((resolve) => {
   setTimeout(resolve.bind(this, getFilteredData(filters)), 800);
 });
 
+export const loadStatistics = (personId) => new Promise((resolve) => {
+  setTimeout(resolve.bind(this, getStatistics(personId)), 800);
+});
+
 const getFilteredData = filters => data.data;
+const getStatistics = personId => statistics.data;
