@@ -116,6 +116,7 @@ class LeagueTableFilter extends React.Component {
                 options={filters[Filter.AGE_GROUP]}
                 style={{ width: 160, height: 34 }}
                 menuStyle={{ minWidth: 160 }}
+                disabled={disabled}
               />
             </FormGroup>
 

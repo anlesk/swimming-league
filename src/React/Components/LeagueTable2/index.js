@@ -88,14 +88,13 @@ class LeagueTable extends React.Component {
   }
 
   renderDataRow = (node, idx) => {
-    const { expanded } = this.state;
-    const { statistics = {} } = this.props;
+    const { statistics = {}, statisticsShownForId } = this.props;
     const { phone, rating, student: { name } = {} } = node;
     const key = phone || `${name}_${rating}`;
 
     const statisticsRow = get(statistics, `${key}.items`, []);
     const statisticsStatus = get(statistics, `${key}.status`);
-    const isRowExpanded = expanded === idx;
+    const isRowExpanded = statisticsShownForId === idx;
 
     const basicRow = (
       <ListGroupItem
@@ -190,15 +189,7 @@ class LeagueTable extends React.Component {
     )
   }
 
-  expandRow = (personId, idx) => {
-    const { expanded: currentlyExpanded } = this.state;
-    if (currentlyExpanded === idx) {
-      this.setState({ expanded: null });
-    } else {
-      this.setState({ expanded: idx });
-      this.props.onStatisticsRequest(personId);
-    }
-  }
+  expandRow = (personId, idx) => this.props.onStatisticsRequest(personId, idx);
 
   hoverRow = idx => {
     const { hovered } = this.state;

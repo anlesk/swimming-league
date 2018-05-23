@@ -20,6 +20,8 @@ import {
 import {
   getStatistics,
   loadStatisticsAC,
+  showStatisticsAC,
+  hideStatisticsAC,
 } from '../../../Redux/Ducks/Statistics';
 import {
   getSortBy,
@@ -35,22 +37,33 @@ class LeagueContainer extends React.Component {
   handleChangeFilter = (filter, value) => {
     this.props.selectFilterAC(filter, value);
     this.props.loadLeaderboardSagaAC();
+    this.props.hideStatisticsAC();
   }
 
   handleChangeSort = (sortBy) => {
     this.props.changeSortByAC(sortBy);
     this.props.loadLeaderboardSagaAC();
+    this.props.hideStatisticsAC();
   }
 
   handleShowMore = () => {}
 
-  handleStatisticsRequest = personId => this.props.loadStatisticsAC(personId);
+  handleStatisticsRequest = (personId, rowId) => {
+    const { statistics: { statisticsShownForId } } = this.props;
+    if (statisticsShownForId === rowId) {
+      this.props.hideStatisticsAC();
+    } else {
+      this.props.showStatisticsAC(rowId);
+      this.props.loadStatisticsAC(personId);
+    }
+  }
 
   handleClearFilters = () => {
     //TODO: Dirty hack, think of how to clear input value without changing the component API
     this.leagueTableFilter.input.value = '';
     this.props.clearFiltersAC();
     this.props.loadLeaderboardSagaAC();
+    this.props.hideStatisticsAC();
   }
 
   render() {
@@ -65,6 +78,7 @@ class LeagueContainer extends React.Component {
     } = this.props;
 
     const isFiltersDisabled = filtersStatus === Status.LOADING;
+    const statisticsShownForId = statistics.statisticsShownForId;
 
     return (
       <Grid>
@@ -94,6 +108,7 @@ class LeagueContainer extends React.Component {
             statistics={statistics}
             sortBy={sortBy}
             sortDirection={sortDirection}
+            statisticsShownForId={statisticsShownForId}
             onStatisticsRequest={this.handleStatisticsRequest}
             onShowMore={this.handleShowMore}
             onSortChange={this.handleChangeSort}
@@ -115,6 +130,8 @@ export default connect(state => ({
 }), {
   loadLeaderboardSagaAC,
   loadStatisticsAC,
+  showStatisticsAC,
+  hideStatisticsAC,
   selectFilterAC,
   clearFiltersAC,
   changeSortByAC,
