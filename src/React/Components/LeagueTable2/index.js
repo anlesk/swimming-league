@@ -192,8 +192,12 @@ class LeagueTable extends React.Component {
 
   expandRow = (personId, idx) => {
     const { expanded: currentlyExpanded } = this.state;
-    this.setState({ expanded: currentlyExpanded === idx ? null : idx });
-    this.props.onStatisticsRequest(personId);
+    if (currentlyExpanded === idx) {
+      this.setState({ expanded: null });
+    } else {
+      this.setState({ expanded: idx });
+      this.props.onStatisticsRequest(personId);
+    }
   }
 
   hoverRow = idx => {
