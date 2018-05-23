@@ -10,6 +10,7 @@ import classnames from 'classnames';
 import { get } from 'lodash';
 import { PulseLoader } from 'react-spinners';
 import moment from 'moment';
+import Infinite from 'react-infinite';
 
 import Status from '../../../Enums/Status';
 import SortDirection from '../../../Enums/SortDirection';
@@ -86,6 +87,8 @@ class LeagueTable extends React.Component {
       hoveredRowId: null,
     }
   }
+
+  handleInfiniteLoad = () => {console.log('infinite');}
 
   renderDataRow = (node, idx) => {
     const { statistics = {}, statisticsShownForId } = this.props;
@@ -218,7 +221,17 @@ class LeagueTable extends React.Component {
         {
           dataStatus === Status.LOADING
             ? loadingElement
-            : dataItems.map(({ node }, idx) => this.renderDataRow(node, idx))
+            : (
+              <Infinite
+                containerHeight={350}
+                elementHeight={40}
+                infiniteLoadBeginEdgeOffset={200}
+                useWindowAsScrollContainer
+                onInfiniteLoad={this.handleInfiniteLoad}
+              >
+                {dataItems.map(({ node }, idx) => this.renderDataRow(node, idx))}
+              </Infinite>
+            )
         }
       </ListGroup>
     );
