@@ -12,9 +12,7 @@ export const CLEAR_FILTER = 'CLEAR_FILTER';
 const initialState = {
   status: {},
   values: {},
-  selected: {
-    name: '',
-  },
+  selected: {},
 };
 
 function saveFilter(filters, filterType, payload) {

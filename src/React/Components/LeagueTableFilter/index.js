@@ -55,7 +55,6 @@ class LeagueTableFilter extends React.Component {
                   onKeyDown={this.handleKeyDown}
                   name={Filter.NAME}
                   type='text'
-                  defaultValue={selectedFilters[Filter.NAME]}
                   inputRef={(ref) => {this.input = ref}}
                   placeholder='Введите имя'
                   disabled={disabled}
