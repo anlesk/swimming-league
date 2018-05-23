@@ -34,6 +34,12 @@ class LeagueContainer extends React.Component {
 
   handleChangeFilter = (filter, value) => {
     this.props.selectFilterAC(filter, value);
+    this.props.loadLeaderboardSagaAC();
+  }
+
+  handleChangeSort = (sortBy) => {
+    this.props.changeSortByAC(sortBy);
+    this.props.loadLeaderboardSagaAC();
   }
 
   handleShowMore = () => {}
@@ -44,6 +50,7 @@ class LeagueContainer extends React.Component {
     //TODO: Dirty hack, think of how to clear input value without changing the component API
     this.leagueTableFilter.input.value = '';
     this.props.clearFiltersAC();
+    this.props.loadLeaderboardSagaAC();
   }
 
   render() {
@@ -89,7 +96,7 @@ class LeagueContainer extends React.Component {
             sortDirection={sortDirection}
             onStatisticsRequest={this.handleStatisticsRequest}
             onShowMore={this.handleShowMore}
-            onSortChange={this.props.changeSortByAC}
+            onSortChange={this.handleChangeSort}
           />
         </Row>
       </Grid>
