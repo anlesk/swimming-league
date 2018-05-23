@@ -13,14 +13,7 @@ import 'react-select/dist/react-select.css';
 import { throttle } from 'lodash';
 
 import './styles/main.css'
-
-const Filter = {
-  NAME: 'name',
-  SEX: 'sex',
-  AGE_GROUP: 'ageGroup',
-  CITY: 'city',
-  SUB20: 'sub20',
-}
+import Filter from '../../../Enums/Filter';
 
 class LeagueTableFilter extends React.Component {
   handleKeyDown = (e) => {
@@ -34,10 +27,6 @@ class LeagueTableFilter extends React.Component {
   };
 
   selectFilter = (filter, value) => this.props.onChangeFilter(filter, value);
-
-  handleInputChange = (e) => this.throttledInputChange(Filter.NAME, e.target.value);
-
-  throttledInputChange = throttle(this.selectFilter, 100);
 
   render() {
     const {
@@ -67,9 +56,8 @@ class LeagueTableFilter extends React.Component {
                   onKeyDown={this.handleKeyDown}
                   name={Filter.NAME}
                   type='text'
-                  value={selectedFilters[Filter.NAME]}
+                  defaultValue={selectedFilters[Filter.NAME]}
                   inputRef={(ref) => {this.input = ref}}
-                  onChange={this.handleInputChange}
                   placeholder='Введите имя'
                   disabled={disabled}
                 />

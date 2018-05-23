@@ -40,6 +40,12 @@ class LeagueContainer extends React.Component {
 
   handleStatisticsRequest = personId => this.props.loadStatisticsAC(personId);
 
+  handleClearFilters = () => {
+    //TODO: Dirty hack, think of how to clear input value without changing the component API
+    this.leagueTableFilter.input.value = '';
+    this.props.clearFiltersAC();
+  }
+
   render() {
     const {
       leaderboard,
@@ -64,10 +70,11 @@ class LeagueContainer extends React.Component {
 
         <Row>
           <LeagueTableFilter
+            ref={(el) => { this.leagueTableFilter = el; }}
             filters={filters}
             selectedFilters={selectedFilters}
             onChangeFilter={this.handleChangeFilter}
-            onClearFilters={this.props.clearFiltersAC}
+            onClearFilters={this.handleClearFilters}
             disabled={isFiltersDisabled}
           />
         </Row>
