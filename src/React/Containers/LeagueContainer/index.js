@@ -2,7 +2,7 @@ import React from 'react';
 import { Grid, Row } from 'react-bootstrap';
 import { connect } from 'react-redux';
 
-import LeagueTable from '../../Components/LeagueTable2';
+import LeagueTable from '../../Components/LeagueTable';
 import LeagueTableFilter from '../../Components/LeagueTableFilter';
 import Status from '../../../Enums/Status';
 

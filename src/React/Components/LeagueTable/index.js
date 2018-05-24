@@ -1,199 +1,242 @@
 import React from 'react';
-import { AutoSizer, Table, Column, SortDirection, SortIndicator } from 'react-virtualized';
-import 'react-virtualized/styles.css';
+import {
+  ListGroup,
+  ListGroupItem,
+  Col,
+} from 'react-bootstrap';
+import SortAscIcon from 'react-icons/lib/md/arrow-drop-up';
+import SortDescIcon from 'react-icons/lib/md/arrow-drop-down';
+import classnames from 'classnames';
+import { get } from 'lodash';
+import { PulseLoader } from 'react-spinners';
+import moment from 'moment';
+import Infinite from 'react-infinite';
 
+import Status from '../../../Enums/Status';
+import SortDirection from '../../../Enums/SortDirection';
 import locales from './locales';
-import './styles/main.css';
+import './styles/style.css';
+
+const cols = {
+  position: {
+    id: 'rating',
+    width: '8%',
+    getValue: ({ rating, ratingInAgeGroup }) => `${rating}/${ratingInAgeGroup}`,
+    hideIfExpanded: true,
+    sortable: true,
+  },
+  name: {
+    id: 'name',
+    width: '20%',
+    getValue: ({ student: { name } = {} }) => name,
+    hideIfExpanded: true,
+    sortable: true,
+  },
+  city: {
+    id: 'city',
+    width: '19%',
+    getValue: ({ city }) => city,
+    hideIfExpanded: true,
+    sortable: true,
+  },
+  sex: {
+    id: 'sex',
+    width: '5%',
+    getValue: ({ sex }) => sex,
+    sortable: true,
+  },
+  ageGroup: {
+    id: 'ageGroup',
+    width: '16%',
+    getValue: ({ ageGroup }) => ageGroup,
+    sortable: true,
+  },
+  result: {
+    id: 'totalTime',
+    width: '10%',
+    getValue: ({ totalTime }) => moment(totalTime).format('HH:mm:ss'),
+    sortable: true,
+  },
+  eventDate: {
+    id: 'date',
+    width: '10%',
+    getValue: ({ controlLesson: { date } = {} }) => date,
+    sortable: true,
+  },
+  sub20: {
+    id: 'sub20',
+    width: '7%',
+    getValue: ({ totalTime }) => totalTime < 20 * 60 * 60,
+  },
+}
+
+const LoadingElement = ({ className }) => (
+  <div className={classnames('loading-row', className)}>
+    <PulseLoader
+      color={'#46b8da'}
+      loading
+    />
+  </div>
+);
+
+const INFINITE_SCROLL_OFFSET = 30;
 
 class LeagueTable extends React.Component {
   constructor(props) {
     super(props);
 
-    const sortBy = 'sex';
-    const sortDirection = SortDirection.ASC;
-    const sortedList = props.data;
-
     this.state = {
-      disableHeader: false,
-      headerHeight: 30,
-      height: 270,
-      hideIndexRow: false,
-      overscanRowCount: 10,
-      rowHeight: 40,
-      rowCount: 1000,
-      scrollToIndex: undefined,
-      sortBy,
-      sortDirection,
-      sortedList,
-      useDynamicRowHeight: false,
       hoveredRowId: null,
-      expanded: {},
-    };
+    }
   }
 
-  _getDatum = (list, index) => {
-    return list[(index % list.length)];
-  }
+  handleInfiniteLoad = () => this.props.onShowMore();
 
-  _getRowHeight = ({index}) => {
-    const {data: list} = this.props;
+  renderDataRow = (node, idx) => {
+    const { statistics = {}, statisticsShownForId } = this.props;
+    const { phone, rating, student: { name } = {} } = node;
+    const key = phone || `${name}_${rating}`;
 
-    return this._getDatum(list, index).size;
-  }
+    const statisticsRow = get(statistics, `${key}.items`, []);
+    const statisticsStatus = get(statistics, `${key}.status`);
+    const isRowExpanded = statisticsShownForId === idx;
 
-  _headerRenderer = ({dataKey, sortBy, sortDirection}) => {
-    console.log(dataKey, sortBy);
+    const basicRow = (
+      <ListGroupItem
+        onMouseOver={() => this.hoverRow(idx)}
+        onClick={() => this.expandRow(key, idx)}
+        className={classnames('data-row', isRowExpanded && 'expanded-data-row')}
+      >
+        {Object.keys(cols).map((colName) => {
+          const { width, getValue } = cols[colName];
+
+          return (
+            <Col
+              key={colName}
+              style={{ width }}
+            >
+              {getValue(node)}
+            </Col>
+          )
+        })}
+      </ListGroupItem>
+    );
+
+    const getExpandedRows = () => statisticsRow.map(({ node }) => {
+      const {
+        controlLesson: { date } = {},
+        totalTime,
+      } = node;
+
+      return (
+        <ListGroupItem
+          key={`${date}_${totalTime}`}
+          className='expanded-data-row'
+        >
+          {Object.keys(cols).map((colName) => {
+            const { width, getValue, hideIfExpanded = false } = cols[colName];
+
+            return (
+              <Col
+                key={colName}
+                style={{ width }}
+              >
+                {!hideIfExpanded && getValue(node)}
+              </Col>
+            )
+          })}
+        </ListGroupItem>
+      );
+    });
 
     return (
-      <div>
-        Full Name
-        {sortBy === dataKey && <SortIndicator sortDirection={sortDirection} />}
-      </div>
-    );
+      <React.Fragment key={key}>
+        {basicRow}
+        {
+          statisticsStatus === Status.LOADING
+            ? <LoadingElement className={'background-gray'} />
+            : isRowExpanded && getExpandedRows()
+        }
+      </React.Fragment>
+    )
   }
 
-  _isSortEnabled = () => {
-    const {data: list} = this.props;
-    const {rowCount} = this.state;
+  renderHeaderCol = colName => {
+    const { sortBy, sortDirection } = this.props;
+    const SortDirectionIcon = sortDirection === SortDirection.DESC ? SortDescIcon : SortAscIcon;
 
-    // return rowCount <= list.size;
-    return true;
+    return (
+    <React.Fragment key={colName}>
+      <span>{locales[colName]}</span>
+      {cols[colName].id === sortBy && <SortDirectionIcon />}
+    </React.Fragment>
+  )}
+
+  renderHeader = () => {
+    return (
+      <ListGroupItem
+        className='header-row'
+      >
+        {Object.keys(cols).map((colName) => {
+          const { width, id, sortable } = cols[colName];
+
+          return (
+            <Col
+              key={colName}
+              style={{ width }}
+              onClick={sortable && (() => this.sort(id))}
+            >
+              {this.renderHeaderCol(colName)}
+            </Col>
+          )
+        })}
+      </ListGroupItem>
+    )
   }
 
-  _noRowsRenderer = () => {
-    return <div className={'noRows'}>No rows</div>;
+  expandRow = (personId, idx) => this.props.onStatisticsRequest(personId, idx);
+
+  hoverRow = idx => {
+    const { hovered } = this.state;
+
+    if (hovered === idx) return;
+
+    this.setState({ hovered: idx });
   }
 
-  _onRowCountChange = (event) => {
-    const rowCount = parseInt(event.target.value, 10) || 0;
-
-    this.setState({rowCount});
+  sort = id => {
+    this.props.onSortChange(id);
   }
-
-  _onScrollToRowChange = (event) => {
-    const {rowCount} = this.state;
-    let scrollToIndex = Math.min(
-      rowCount - 1,
-      parseInt(event.target.value, 10),
-    );
-
-    if (isNaN(scrollToIndex)) {
-      scrollToIndex = undefined;
-    }
-
-    this.setState({scrollToIndex});
-  };
-
-  _rowClassName = ({index}) => {
-    if (index < 0) {
-      return 'headerRow';
-    } else {
-      return index === this.state.hoveredRowId ? 'oddRow' : 'evenRow';
-    }
-  };
-
-  _sort = ({sortBy, sortDirection}) => {
-    // const sortedList = this._sortList({sortBy, sortDirection});
-    //
-    // this.setState({sortBy, sortDirection, sortedList});
-  }
-
-  _sortList = ({sortBy, sortDirection}) => {
-    const {data: list} = this.props;
-
-    // return list
-    //   .sortBy(item => item[sortBy])
-    //   .update(
-    //     list => (sortDirection === SortDirection.DESC ? list.reverse() : list),
-    //   );
-  };
-
-  _updateUseDynamicRowHeight = (value) => {
-    this.setState({
-      useDynamicRowHeight: value,
-    });
-  };
-
-  _handleRowMouseOver = ({ event, index, rowData }) => {
-    this.setState({
-      hoveredRowId: index,
-    });
-  }
-
-  _handleRowClick = () => alert('show detailed stats')
 
   render() {
     const {
-      data,
+      leaderboard: {
+        status: dataStatus,
+        edges: dataItems = [],
+        totalCount,
+      },
     } = this.props;
 
-    const {
-      disableHeader,
-      headerHeight,
-      height,
-      hideIndexRow,
-      overscanRowCount,
-      rowHeight,
-      rowCount,
-      scrollToIndex,
-      sortBy,
-      sortDirection,
-      useDynamicRowHeight,
-      expanded,
-    } = this.state;
-
-    const rowGetter = ({index}) => this._getDatum(data, index);
-    const columns = [
-      { id: 'position', flexGrow: 1 },
-      { id: 'name', flexGrow: 2 },
-      { id: 'city', flexGrow: 2 },
-      { id: 'sex', flexGrow: 2 },
-      { id: 'ageGroup', flexGrow: 2 },
-      { id: 'result', flexGrow: 2 },
-      { id: 'eventDate', flexGrow: 2 },
-    ];
+    const infiniteLoadBeginEdgeOffset = totalCount === dataItems.length ? undefined : INFINITE_SCROLL_OFFSET;
+    const isLoading = dataStatus === Status.LOADING;
 
     return (
-      <div className={'league-table'}>
-        <AutoSizer>
-          {({ width }) => (
-            <Table
-              disableHeader={disableHeader}
-              headerClassName={'headerColumn'}
-              headerHeight={headerHeight}
-              height={height}
-              autoHeight
-              noRowsRenderer={this._noRowsRenderer}
-              overscanRowCount={overscanRowCount}
-              rowClassName={this._rowClassName}
-              rowHeight={useDynamicRowHeight ? this._getRowHeight : rowHeight}
-              rowGetter={rowGetter}
-              rowCount={rowCount}
-              scrollToIndex={scrollToIndex}
-              sort={this._sort}
-              sortBy={sortBy}
-              sortDirection={sortDirection}
-              width={width}
-              expanded={expanded}
-
-              onRowClick={this._handleRowClick}
-              onRowMouseOver={this._handleRowMouseOver}
-            >
-              {columns.map(({ id, flexGrow = 1 }) => (
-                <Column
-                  dataKey={id}
-                  className={'exampleColumn'}
-                  label={locales[id]}
-                  cellRenderer={({cellData}) => cellData}
-                  width={50}
-                  flexGrow={flexGrow}
-                />
-              ))}
-            </Table>
-          )}
-        </AutoSizer>
-      </div>
-    )
+      <ListGroup>
+        {this.renderHeader()}
+        <hr style={{ margin: '1px 0px 1px 0px' }} />
+        <Infinite
+          containerHeight={330}
+          elementHeight={40}
+          infiniteLoadBeginEdgeOffset={infiniteLoadBeginEdgeOffset}
+          useWindowAsScrollContainer
+          onInfiniteLoad={this.handleInfiniteLoad}
+          isInfiniteLoading={isLoading}
+          loadingSpinnerDelegate={<LoadingElement />}
+        >
+          {dataItems.map(({ node }, idx) => this.renderDataRow(node, idx))}
+        </Infinite>
+      </ListGroup>
+    );
   }
 }
 
