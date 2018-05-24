@@ -221,21 +221,23 @@ class LeagueTable extends React.Component {
     const isLoading = dataStatus === Status.LOADING;
 
     return (
-      <ListGroup>
-        {this.renderHeader()}
-        <hr style={{ margin: '1px 0px 1px 0px' }} />
-        <Infinite
-          containerHeight={330}
-          elementHeight={40}
-          infiniteLoadBeginEdgeOffset={infiniteLoadBeginEdgeOffset}
-          useWindowAsScrollContainer
-          onInfiniteLoad={this.handleInfiniteLoad}
-          isInfiniteLoading={isLoading}
-          loadingSpinnerDelegate={<LoadingElement />}
-        >
-          {dataItems.map(({ node }, idx) => this.renderDataRow(node, idx))}
-        </Infinite>
-      </ListGroup>
+      <div className={'league-table'}>
+        <ListGroup>
+          {this.renderHeader()}
+          <hr style={{ margin: '1px 0px 1px 0px' }} />
+          <Infinite
+            containerHeight={330}
+            elementHeight={40}
+            infiniteLoadBeginEdgeOffset={infiniteLoadBeginEdgeOffset}
+            useWindowAsScrollContainer
+            onInfiniteLoad={this.handleInfiniteLoad}
+            isInfiniteLoading={isLoading}
+            loadingSpinnerDelegate={<LoadingElement />}
+          >
+            {dataItems.map(({ node }, idx) => this.renderDataRow(node, idx))}
+          </Infinite>
+        </ListGroup>
+      </div>
     );
   }
 }
