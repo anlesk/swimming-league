@@ -122,12 +122,18 @@ class LeagueTableFilter extends React.Component {
 
             <FormGroup style={{ marginLeft: 20 }}>
               <Button
-                bsStyle={selectedFilters[Filter.SUB20] === true ? "info" : 'default'}
+                bsStyle={selectedFilters[Filter.SUB20] === true ? "selected-sub20-button" : 'default'}
                 onClick={() => this.selectFilter(Filter.SUB20, !selectedFilters[Filter.SUB20])}
                 disabled={disabled}
               >
                 SUB20
               </Button>
+              <span
+                className={'x-button'}
+                onClick={() => this.selectFilter(Filter.SUB20, !selectedFilters[Filter.SUB20])}
+              >
+                x
+              </span>
             </FormGroup>
           </Form>
         </Row>

@@ -87,7 +87,7 @@ class LeagueContainer extends React.Component {
     return (
       <Grid>
         <Row>
-          <h1 style={{ color: '#46b8da' }}>SWIMMING</h1>
+          <h1 style={{ color: '#0185ea' }}>SWIMMING</h1>
           <h1><b>League</b> 1 km</h1>
         </Row>
 

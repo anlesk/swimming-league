@@ -17,3 +17,20 @@
   box-shadow: none;
 }
 
+.x-button {
+    color: white;
+    position: absolute;
+    margin-left: -10px;
+    cursor: pointer;
+}
+
+.btn-selected-sub20-button {
+    color: white;
+    background-color: #0185ea !important;
+    border-color: #0185ea !important;
+}
+
+button.btn-selected-sub20-button:hover,
+button.list-group-item.hover {
+    color: white !important;
+}
