@@ -1,5 +1,6 @@
 {
   "name": "swimming-league",
+  "homepage": "http://anlesk.github.io/swimming-league",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -65,10 +66,13 @@
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
     "test": "node scripts/test.js --env=jsdom",
-    "relay": "relay-compiler --src ./src --schema ./schema.graphql"
+    "relay": "relay-compiler --src ./src --schema ./schema.graphql",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "devDependencies": {
     "babel-plugin-relay": "^1.6.0",
+    "gh-pages": "^1.1.0",
     "graphql": "^0.13.2",
     "relay-compiler": "^1.6.0"
   },
