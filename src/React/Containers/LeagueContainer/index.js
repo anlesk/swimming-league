@@ -28,6 +28,7 @@ import {
   getSortDirection,
   changeSortByAC,
 } from '../../../Redux/Ducks/Sort';
+import './styles/main.css';
 
 class LeagueContainer extends React.Component {
   componentDidMount() {
@@ -87,7 +88,7 @@ class LeagueContainer extends React.Component {
     return (
       <Grid>
         <Row>
-          <h1 style={{ color: '#0185ea' }}>SWIMMING</h1>
+          <h1 className={'swimming-header'}>SWIMMING</h1>
           <h1><b>League</b> 1 km</h1>
         </Row>
 
