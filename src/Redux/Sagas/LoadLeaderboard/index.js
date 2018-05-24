@@ -7,10 +7,12 @@ import { LOAD_FILTER, LOAD_FILTERS } from '../../Ducks/Filters';
 import {
   getSelectedFilters,
 } from '../../Ducks/Filters';
+import { getLeaderboard } from '../../Ducks/Leaderboard';
 import Services from '../../../Services';
 import { createStartAction, createSuccessAction, createFailAction } from "../../Utils/withSuffix";
 import Filter from '../../../Enums/Filter';
 
+const ELEMENTS_SIZE_ON_PAGE = 20;
 
 const loadableFilters = [Filter.CITY, Filter.AGE_GROUP, Filter.SEX]
   .reduce((memo, filter) => ({ ...memo, [filter]: filter }), {});
@@ -25,7 +27,8 @@ const sexFilterValues = [
   }
 ]
 
-export function* loadLeaderboard() {
+export function* loadLeaderboard({ payload }) {
+  const { append = false } = payload;
   try {
     const loadLeaderboardStart = yield call(createStartAction, LOAD_LEADERBOARD);
     yield put(loadLeaderboardStart);
@@ -37,16 +40,29 @@ export function* loadLeaderboard() {
     const loadFiltersStart = yield call(createStartAction, LOAD_FILTERS);
     yield put(loadFiltersStart);
 
+    const { edges = [] } = yield select(getLeaderboard);
+
+    const size = ELEMENTS_SIZE_ON_PAGE;
+    let offset = 0;
+    if (append) {
+      offset = edges.length;
+    }
+
     const filters = yield select(getSelectedFilters);
     const filterIds = Object.entries(filters)
-      .reduce((memo, [key, value]) => ({ ...memo, [key]: value.id }), {})
+      .reduce((memo, [key, value]) => ({ ...memo, [key]: value.id }), { size, offset })
+
     const {
       cities = [],
       ageGroups = [],
       controlLessonResultsConnection,
     } = yield call(Services.GraphQLService.loadData, filterIds);
 
-    const loadLeaderboardSuccess = yield call(createSuccessAction, LOAD_LEADERBOARD, controlLessonResultsConnection);
+    const newData = append
+      ? { ...controlLessonResultsConnection, edges: [...edges, ...controlLessonResultsConnection.edges] }
+      : controlLessonResultsConnection;
+
+    const loadLeaderboardSuccess = yield call(createSuccessAction, LOAD_LEADERBOARD, newData);
     yield put(loadLeaderboardSuccess);
 
     // const loadFilterSuccess = yield call(createSuccessAction, LOAD_FILTER, { filter: 'ageGroup', items: ageGroups });

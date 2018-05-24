@@ -96,5 +96,17 @@ export const loadStatistics = (personId) => new Promise((resolve) => {
   setTimeout(resolve.bind(this, getStatistics(personId)), 800);
 });
 
-const getFilteredData = filters => data.data;
+const getFilteredData = filters => {
+  const { size = 40, offset = 0 } = filters;
+  const filteredData = data.data.controlLessonResultsConnection.edges.slice(offset, offset + size);
+  const newData = {
+    ...data.data,
+    controlLessonResultsConnection: {
+      ...data.data.controlLessonResultsConnection,
+      edges: filteredData,
+    }
+  }
+
+  return newData;
+}
 const getStatistics = personId => statistics.data;

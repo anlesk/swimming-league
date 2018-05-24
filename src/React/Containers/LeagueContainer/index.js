@@ -46,7 +46,7 @@ class LeagueContainer extends React.Component {
     this.props.hideStatisticsAC();
   }
 
-  handleShowMore = () => {}
+  handleShowMore = () => this.props.loadLeaderboardSagaAC(true);
 
   handleStatisticsRequest = (personId, rowId) => {
     const { statistics: { statisticsShownForId } } = this.props;

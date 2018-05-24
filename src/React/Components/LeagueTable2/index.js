@@ -70,14 +70,16 @@ const cols = {
   },
 }
 
-const loadingElement = (
-  <div className='loading-row'>
+const LoadingElement = ({ className }) => (
+  <div className={classnames('loading-row', className)}>
     <PulseLoader
       color={'#46b8da'}
       loading
     />
   </div>
 );
+
+const INFINITE_SCROLL_OFFSET = 30;
 
 class LeagueTable extends React.Component {
   constructor(props) {
@@ -88,7 +90,7 @@ class LeagueTable extends React.Component {
     }
   }
 
-  handleInfiniteLoad = () => {console.log('infinite');}
+  handleInfiniteLoad = () => this.props.onShowMore();
 
   renderDataRow = (node, idx) => {
     const { statistics = {}, statisticsShownForId } = this.props;
@@ -152,7 +154,7 @@ class LeagueTable extends React.Component {
         {basicRow}
         {
           statisticsStatus === Status.LOADING
-            ? loadingElement
+            ? <LoadingElement className={'background-gray'} />
             : isRowExpanded && getExpandedRows()
         }
       </React.Fragment>
@@ -211,28 +213,28 @@ class LeagueTable extends React.Component {
       leaderboard: {
         status: dataStatus,
         edges: dataItems = [],
+        totalCount,
       },
     } = this.props;
+
+    const infiniteLoadBeginEdgeOffset = totalCount === dataItems.length ? undefined : INFINITE_SCROLL_OFFSET;
+    const isLoading = dataStatus === Status.LOADING;
 
     return (
       <ListGroup>
         {this.renderHeader()}
         <hr style={{ margin: '1px 0px 1px 0px' }} />
-        {
-          dataStatus === Status.LOADING
-            ? loadingElement
-            : (
-              <Infinite
-                containerHeight={350}
-                elementHeight={40}
-                infiniteLoadBeginEdgeOffset={200}
-                useWindowAsScrollContainer
-                onInfiniteLoad={this.handleInfiniteLoad}
-              >
-                {dataItems.map(({ node }, idx) => this.renderDataRow(node, idx))}
-              </Infinite>
-            )
-        }
+        <Infinite
+          containerHeight={330}
+          elementHeight={40}
+          infiniteLoadBeginEdgeOffset={infiniteLoadBeginEdgeOffset}
+          useWindowAsScrollContainer
+          onInfiniteLoad={this.handleInfiniteLoad}
+          isInfiniteLoading={isLoading}
+          loadingSpinnerDelegate={<LoadingElement />}
+        >
+          {dataItems.map(({ node }, idx) => this.renderDataRow(node, idx))}
+        </Infinite>
       </ListGroup>
     );
   }

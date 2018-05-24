@@ -20,8 +20,8 @@ export default function reducer(leaderboard = initialState, action = {}) {
     }
 
     case withSuccess(LOAD_LEADERBOARD): {
-      const { pageInfo, edges } = payload;
-      return { edges, status: Status.SUCCESS };
+      const { pageInfo, totalCount, edges } = payload;
+      return { totalCount, edges, status: Status.SUCCESS };
     }
 
     default:
@@ -32,7 +32,7 @@ export default function reducer(leaderboard = initialState, action = {}) {
 // Action Creators for Reducers
 
 // Action Creators for Sagas
-export const loadLeaderboardSagaAC = () => createAction(LOAD_LEADERBOARD);
+export const loadLeaderboardSagaAC = (append) => createAction(LOAD_LEADERBOARD, { append });
 
 // Selectors
 export const getLeaderboard = state => state.leaderboard;
