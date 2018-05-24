@@ -54,7 +54,7 @@ const cols = {
   result: {
     id: 'totalTime',
     width: '10%',
-    getValue: ({ totalTime }) => moment(totalTime).format('HH:mm:ss'),
+    getValue: ({ totalTime }) => moment.utc(totalTime).format('HH:mm:ss'),
     sortable: true,
   },
   eventDate: {
