@@ -38,7 +38,7 @@ class LeagueTableFilter extends React.Component {
 
     return (
       <React.Fragment>
-        <Row style={{ textAlign: 'right' }}>
+        <Row className={'clearFilterRow'}>
           <Button
             className={'clearFiltersButton'}
             onClick={onClearFilters}

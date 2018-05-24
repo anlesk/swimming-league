@@ -11,10 +11,21 @@
   white-space: nowrap;
 }
 
+.clearFilterRow {
+    max-width: 840px;
+    text-align: right;
+}
+
 .clearFiltersButton {
   border: none;
   outline: none !important;
   box-shadow: none;
+}
+
+.clearFiltersButton.btn-default:hover,
+.clearFiltersButton.btn-default.hover {
+    background-color: white !important;
+    border-color: white !important;
 }
 
 .x-button {
